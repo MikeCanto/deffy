@@ -8,19 +8,37 @@ p = int(deffy, 16)
 
 # se generan los numero aleatorios
 a_alice = getrandbits(256)
-b_bob = getrandbits(256)
+e_eve = getrandbits(256)
 
 # se generan las llaves privadas
 a = g ^ a_alice % p
-b = g ^ b_bob % p
+e = g ^ e_eve % p
 
-# se genera la llave compartida
-s1 = b ^ a_alice % p
-s2 = a ^ b_bob % p
+# se genera la llave compartida (publica)
+s1 = e ^ a_alice % p
+s2 = a ^ e_eve % p
 
 # Hash s1 and s2
 hash_s1 = hashlib.sha256(str(s1).encode()).hexdigest()
 hash_s2 = hashlib.sha256(str(s2).encode()).hexdigest()
 
-print(hash_s1)
-print(hash_s2)
+print(f"Alice: {hash_s1}")
+print(f"Eve: {hash_s2}")
+
+e_eve = getrandbits(256)
+b_bob = getrandbits(256)
+
+# se generan las llaves privadas
+e = g ^ e_eve % p
+b = g ^ b_bob % p
+
+# se genera la llave compartida
+s1 = b ^ e_eve % p
+s2 = e ^ b_bob % p
+
+# Hash s1 and s2
+hash_s3 = hashlib.sha256(str(s1).encode()).hexdigest()
+hash_s4 = hashlib.sha256(str(s2).encode()).hexdigest()
+
+print(f"Eve: {hash_s3}")
+print(f"Bob: {hash_s4}")
